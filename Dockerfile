@@ -2,7 +2,8 @@
 FROM neo4j:4.0.0
 
 # Set environment variables
-ENV NEO4J_apoc_export_file_enabled=true \
+ENV NEO4J_AUTH=neo4j/secret \
+    NEO4J_apoc_export_file_enabled=true \
     NEO4J_apoc_import_file_enabled=true \
     NEO4J_dbms_security_procedures_unrestricted=apoc.*,algo.* \
     NEO4J_dbms_memory_heap_initial__size=512m \
