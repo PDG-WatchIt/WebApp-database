@@ -66,7 +66,7 @@
 {
   "statements": [
     {
-      "statement": "CREATE (n:MOVIE {id: $id}) RETURN n",
+      "statement": "MERGE (n:MOVIE {id: $id}) RETURN n",
       "parameters": {
         "id": "123456"
       }
@@ -87,26 +87,29 @@
   ]
 }
 ```
-## watchparty
-### create watchparty
+## WATCH_PARTY
+### create WATCH_PARTY
 ```
 {
   "statements": [
     {
-      "statement": "CREATE (n:WATCH PARTY {idFilm: $idFilm}) RETURN n",
+      "statement": "MATCH (user:USER) WHERE user.username = $owner
+CREATE (user)-[r:Created {date: $date}]->(n:WATCH_PARTY {idFilm: $idFilm}) RETURN n",
       "parameters": {
-        "idFilm": "123456",
+        "owner": "Alice",
+        "date": "28-08-2023",
+        "idFilm": "123456"
       }
     }
   ]
 }
 ```
-### get watch party
+### get WATCH_PARTY based on film id
 ```
 {
   "statements": [
     {
-      "statement": "MATCH (n:WATCH PARTY {idFilm: $idFilm}) RETURN n",
+      "statement": "MATCH (n:WATCH_PARTY {idFilm: $idFilm}) RETURN n",
       "parameters": {
         "idFilm": "123456"
       }
@@ -114,3 +117,120 @@
   ]
 }
 ```
+
+
+## Relationships
+
+### create friendship
+
+```
+{
+  "statements": [
+    {
+      "statement": "MATCH (a:USER), (b:USER) WHERE a.username = "Fred" AND b.username = "Alice" MERGE (a)-[r:Friend_With {date: $date}]->(b)",
+      "parameters": {
+        "user1": "Alice",
+        "user2": "Fred",
+        "date": "28-08-2023"
+      }
+    }
+  ]
+}
+```
+### create Watched
+
+```
+{
+  "statements": [
+    {
+      "statement": "MATCH (a:USER), (b:MOVIE) WHERE a.username = $idUser AND b.id = $idFilm MERGE (a)-[r:Watched {date: $date}]->(b)",
+      "parameters": {
+        "idUser": "Alice",
+        "idFilm": "12345",
+        "date": "28-08-2023"
+      }
+    }
+  ]
+}
+```
+### create Rated
+
+```
+{
+  "statements": [
+    {
+      "statement": "MATCH (a:USER), (b:MOVIE) WHERE a.username = $idUser AND b.id = $idFilm MERGE (a)-[r:Rated {date: $date, rating: $rating}]->(b)",
+      "parameters": {
+        "idUser": "Alice",
+        "idFilm": "12345",
+        "date": "28-08-2023",
+        "rating": 3
+      }
+    }
+  ]
+}
+```
+
+
+### create chated
+
+```
+{
+  "statements": [
+    {
+      "statement": "MATCH (a:USER)-[:Created]->(c:WATCH_PARTY), (b:USER)  
+      WHERE a.username = $owner AND c.idFilm = $idFilm AND b.username = $user
+      MERGE (b)-[r:Chated {date: $date, content: $content}]->(c)",
+      "parameters": {
+        "owner": "Alice",
+        "idFilm": "23456",
+        "user": "Fred",
+        "date": "24-03-2023",
+        "content": "trop bien"
+      }
+    }
+  ]
+}
+```
+
+### get friend's movies
+
+```
+{
+  "statements": [
+    {
+      "statement": "
+        MATCH (a:USER)-[:Friend_With]->(b:USER)-[:Watched]->(c:MOVIE) 
+        WHERE a.username = $user1 AND b.username = $user2
+        RETURN c",
+      "parameters": {
+        "user1": "Alice",
+        "user2": "Fred",
+      }
+    }
+  ]
+}
+```
+
+
+### get number of friend that watched this movies
+
+```
+{
+  "statements": [
+    {
+      "statement": "
+        MATCH (a:USER)-[:Friend_With]->(b:USER)-[:Watched]->(c:MOVIE)
+        WHERE a.username = $user1 AND c.id = $idFilm
+        RETURN COUNT(b)",
+      "parameters": {
+        "user1": "Alice",
+        "idFilm": 12345,
+      }
+    }
+  ]
+}
+```
+
+### get number of commun movies with friends
+
