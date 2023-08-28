@@ -17,10 +17,17 @@ ENV NEO4J_AUTH=neo4j/secret \
 EXPOSE 7474 7687
 
 # Create necessary directories
-RUN mkdir -p /data /plugins /import
+RUN mkdir -p /data /plugins /import /conf
 
 # Define volumes
-VOLUME /data /plugins /import
+VOLUME /data /plugins /import /conf
+
+RUN chown neo4j:neo4j /conf/
+
+# Copy the Neo4j configuration
+COPY /conf/neo4j.conf /conf/neo4j.conf
+
+
 
 # The CMD instruction is not needed in this context as it's provided by the base image
 
