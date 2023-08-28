@@ -214,7 +214,6 @@ CREATE (user)-[r:Created {date: $date}]->(n:WATCH_PARTY {idFilm: $idFilm}) RETUR
 
 
 ### get number of friend that watched this movies
-
 ```
 {
   "statements": [
@@ -232,5 +231,55 @@ CREATE (user)-[r:Created {date: $date}]->(n:WATCH_PARTY {idFilm: $idFilm}) RETUR
 }
 ```
 
+### get list of friend that watched this movie
+```
+{
+  "statements": [
+    {
+      "statement": "
+        MATCH (a:USER)-[:Friend_With]->(b:USER)-[:Watched]->(c:MOVIE)
+        WHERE a.username = $user1 AND c.id = $idFilm
+        RETURN b",
+      "parameters": {
+        "user1": "Alice",
+        "idFilm": 12345,
+      }
+    }
+  ]
+}
+```	
 ### get number of commun movies with friends
+```
+{
+  "statements": [
+    {
+      "statement": "
+        MATCH (a:USER)-[:Watched]->(b:MOVIE)<-[:Watched]-(c:USER)
+        WHERE a.username = $user1 AND c.username = $user2
+        RETURN COUNT(b)",
+      "parameters": {
+        "user1": "Alice",
+        "user2": "Fred",
+      }
+    }
+  ]
+}
+```
 
+### get list of commun movies with friends
+```
+{
+  "statements": [
+    {
+      "statement": "
+        MATCH (a:USER)-[:Watched]->(b:MOVIE)<-[:Watched]-(c:USER)
+        WHERE a.username = $user1 AND c.username = $user2
+        RETURN b",
+      "parameters": {
+        "user1": "Alice",
+        "user2": "Fred",
+      }
+    }
+  ]
+}
+```
