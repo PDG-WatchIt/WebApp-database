@@ -1,0 +1,139 @@
+// Base de donnée test à run dans neo4j
+// /!\ LE MOT DE PASSE DE TOUT LES UTILISATEURS EST MonPassword01
+
+// Create users relationships
+
+CREATE (User1:USER {
+  username: "Kylian",
+  hashedpw: "eb9b33036e394c3356a5c8c48575cf3fd41616b74cb7aaa37793d22bb3961aa3",
+  image: "",
+  email: "kylian@mail.com"
+})
+
+CREATE (User2:USER {
+  username: "Louis",
+  hashedpw: "eb9b33036e394c3356a5c8c48575cf3fd41616b74cb7aaa37793d22bb3961aa3",
+  image: "",
+  email: "louis@mail.com"
+})
+
+CREATE (User3:USER {
+  username: "Kevin",
+  hashedpw: "eb9b33036e394c3356a5c8c48575cf3fd41616b74cb7aaa37793d22bb3961aa3",
+  image: "",
+  email: "kevin@mail.com"
+})
+
+CREATE (User4:USER {
+  username: "Emma",
+  hashedpw: "eb9b33036e394c3356a5c8c48575cf3fd41616b74cb7aaa37793d22bb3961aa3",
+  image: "",
+  email: "emma@mail.com"
+})
+
+// Create friends relationships
+
+CREATE (User1)-[:Friend_With {date: datetime({year: 2023, month: 7, day: 1 + toInteger(rand() * 6), 
+hour: toInteger(rand() * 24), minute: toInteger(rand() * 60)})}]->(User2)
+
+CREATE (User2)-[:Friend_With {date: datetime({year: 2023, month: 7, day: 1 + toInteger(rand() * 6), 
+hour: toInteger(rand() * 24), minute: toInteger(rand() * 60)})}]->(User1)
+
+CREATE (User1)-[:Friend_With {date: datetime({year: 2023, month: 7, day: 1 + toInteger(rand() * 6), 
+hour: toInteger(rand() * 24), minute: toInteger(rand() * 60)})}]->(User3)
+
+CREATE (User2)-[:Friend_With {date: datetime({year: 2023, month: 7, day: 1 + toInteger(rand() * 6), 
+hour: toInteger(rand() * 24), minute: toInteger(rand() * 60)})}]->(User4)
+
+CREATE (User2)-[:Friend_With {date: datetime({year: 2023, month: 7, day: 1 + toInteger(rand() * 6), 
+hour: toInteger(rand() * 24), minute: toInteger(rand() * 60)})}]->(User3)
+
+// Create movie node
+
+CREATE (Movie1:MOVIE {id: 9504})
+CREATE (Movie2:MOVIE {id: 9506})
+CREATE (Movie3:MOVIE {id: 9507})
+CREATE (Movie4:MOVIE {id: 9510})
+
+// Create Rated relationships between users and movies
+
+CREATE (User1)-[:Rated {
+  date: datetime({year: 2023, month: 9, day: 7, hour: toInteger(rand() * 13), minute: toInteger(rand() * 60)}),
+  rating: 1 + toInteger(rand() * 10),
+  comment: CASE toInteger(rand() * 3)
+    WHEN 0 THEN "Cool!"
+    WHEN 1 THEN "Boring..."
+    ELSE "Awesome!"
+  END
+}]->(Movie1)
+
+
+CREATE (User4)-[:Rated {
+  date: datetime({year: 2023, month: 9, day: 7, hour: toInteger(rand() * 13), minute: toInteger(rand() * 60)}),
+  rating: 1 + toInteger(rand() * 10),
+  comment: CASE toInteger(rand() * 3)
+    WHEN 0 THEN "Cool!"
+    WHEN 1 THEN "Boring..."
+    ELSE "Awesome!"
+  END
+}]->(Movie1)
+
+CREATE (User3)-[:Rated {
+  date: datetime({year: 2023, month: 9, day: 7, hour: toInteger(rand() * 13), minute: toInteger(rand() * 60)}),
+  rating: 1 + toInteger(rand() * 10),
+  comment: CASE toInteger(rand() * 3)
+    WHEN 0 THEN "Cool!"
+    WHEN 1 THEN "Boring..."
+    ELSE "Awesome!"
+  END
+}]->(Movie1)
+
+CREATE (User2)-[:Rated {
+  date: datetime({year: 2023, month: 9, day: 7, hour: toInteger(rand() * 13), minute: toInteger(rand() * 60)}),
+  rating: 1 + toInteger(rand() * 10),
+  comment: CASE toInteger(rand() * 3)
+    WHEN 0 THEN "Cool!"
+    WHEN 1 THEN "Boring..."
+    ELSE "Awesome!"
+  END
+}]->(Movie2)
+
+CREATE (User4)-[:Rated {
+  date: datetime({year: 2023, month: 9, day: 7, hour: toInteger(rand() * 13), minute: toInteger(rand() * 60)}),
+  rating: 1 + toInteger(rand() * 10),
+  comment: CASE toInteger(rand() * 3)
+    WHEN 0 THEN "Cool!"
+    WHEN 1 THEN "Boring..."
+    ELSE "Awesome!"
+  END
+}]->(Movie2)
+
+CREATE (User4)-[:Rated {
+  date: datetime({year: 2023, month: 9, day: 7, hour: toInteger(rand() * 13), minute: toInteger(rand() * 60)}),
+  rating: 1 + toInteger(rand() * 10),
+  comment: CASE toInteger(rand() * 3)
+    WHEN 0 THEN "Cool!"
+    WHEN 1 THEN "Boring..."
+    ELSE "Awesome!"
+  END
+}]->(Movie3)
+
+CREATE (User1)-[:Rated {
+  date: datetime({year: 2023, month: 9, day: 7, hour: toInteger(rand() * 13), minute: toInteger(rand() * 60)}),
+  rating: 1 + toInteger(rand() * 10),
+  comment: CASE toInteger(rand() * 3)
+    WHEN 0 THEN "Cool!"
+    WHEN 1 THEN "Boring..."
+    ELSE "Awesome!"
+  END
+}]->(Movie4)
+
+CREATE (User3)-[:Rated {
+  date: datetime({year: 2023, month: 9, day: 7, hour: toInteger(rand() * 13), minute: toInteger(rand() * 60)}),
+  rating: 1 + toInteger(rand() * 10),
+  comment: CASE toInteger(rand() * 3)
+    WHEN 0 THEN "Cool!"
+    WHEN 1 THEN "Boring..."
+    ELSE "Awesome!"
+  END
+}]->(Movie4)
